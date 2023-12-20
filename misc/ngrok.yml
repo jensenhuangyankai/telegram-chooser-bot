@@ -1,0 +1,13 @@
+authtoken: tp8AYiKuXQV7nRGnipzr_7UiaMWwVZKnsPTmUvwnrJ
+
+version: 2
+
+tunnels:
+  website:
+    addr: 8001
+    schemes: 
+      - https
+    host_header: "jensenhyk.ngrok.dev"
+    inspect: false
+    proto: http
+    domain: jensenhyk.ngrok.dev
