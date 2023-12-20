@@ -1,0 +1,29 @@
+version: '0.1'
+services:
+    ngrok:
+      image: ngrok/ngrok:latest
+      restart: unless-stopped
+      command:
+        - "start"
+        - "--all"
+        - "--config"
+        - "/misc/ngrok.yml"
+      volumes:
+        - ./misc:/misc
+      ports:
+        - 8001:8001
+
+
+    bot:
+      environment:
+        TZ: "SG"
+      build: ./bot
+      restart: always
+      network_mode: "service:ngrok" #this routes all traffic through ngrok
+      env_file:
+        - .env
+      healthcheck:
+          test: ["CMD", "curl", "-f", "http://localhost:8001"]
+          interval: 20s
+          timeout: 10s
+          retries: 5
