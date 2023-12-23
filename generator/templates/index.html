@@ -10,18 +10,23 @@
         </div>
 
         <script>
-            const host = {{ host }}
-            const tele_user = {{ tele_user }}
-            const sectors = {{ sectors|tojson }}
+            let host = String({{ host }});
+            let tele_user = {{ tele_user }};
+            let sectors = {{ sectors | tojson }};
+
+            {% include "generator.js" %}
+            console.log(toString(host));
+            console.log(sectors);
+
+            sectors.forEach(drawSector);
+            rotate(); // Initial rotation
+            spin();
         </script>
-        
-        <script src="{{url_for('static', filename='js/generator.js')}}"></script>
+
         <script>
 
             // INIT!
-            sectors.forEach(drawSector);
-            rotate(); // Initial rotation
-            spin()
+            
             //var confettiSettings = { target: 'wheel' };
             //var confetti = new ConfettiGenerator(confettiSettings);
             
