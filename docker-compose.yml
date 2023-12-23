@@ -3,12 +3,16 @@ services:
     ngrok:
       image: ngrok/ngrok:latest
       restart: unless-stopped
+      env_file:
+        - .env
       command:
         - "start"
         - "--all"
+        - "--authtoken"
+        - "${NGROK_AUTHTOKEN}"
         - "--config"
         - "/misc/ngrok.yml"
-        - "-authtoken=${NGROK-AUTHTOKEN}"
+        
       volumes:
         - ./misc:/misc
       ports:

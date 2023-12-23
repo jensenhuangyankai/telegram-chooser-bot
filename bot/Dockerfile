@@ -25,8 +25,6 @@ ADD new_graphic_generator.py .
 
 ADD sel.py .
 
-ADD startup.py .
-
 ADD telegram.py .
 
 RUN touch /tmp/xvfb.auth
