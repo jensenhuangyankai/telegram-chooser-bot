@@ -9,7 +9,8 @@ import uvicorn
 import logging
 import threading
 
-from graphic_generator import *
+#from graphic_generator import *
+from new_graphic_generator import *
 from startup import startup
 
 startup()
@@ -29,7 +30,7 @@ bot = telebot.TeleBot(TOKEN, parse_mode='HTML') # You can set parse_mode by defa
 app = fastapi.FastAPI(docs=None, redoc_url=None)
 
 class Winner(BaseModel):
-    chat_id: Union[str, None]
+    tele_user: Union[str, None]
     winner: Union[str, None]
 
 
@@ -79,7 +80,7 @@ def winner(message):
 
             bot.reply_to(message, "Deciding...")
             bot.send_chat_action(message.chat.id, 'typing')
-            thread1 = threading.Thread(target=generate_wheel, args=(wheel_values, message.chat.id))
+            thread1 = threading.Thread(target=record_wheel, args=(message.chat.id, wheel_values))
             thread1.start()
             time.sleep(5)
             bot.send_chat_action(message.chat.id, 'typing')
@@ -92,16 +93,23 @@ def winner(message):
         else:
             bot.reply_to(message, "Please wait for the previous wheel to finish spinning before you generate a new winner!")
             
-	
-@app.get('/winner_helper')
-def winner_helper(winner: Winner):
-    chat_id = winner.chat_id
-    bot.send_chat_action(chat_id, 'upload_video')
-    bot.send_animation(chat_id, animation=open('output_{chatID}.gif'.format(chatID = chat_id), 'rb'))
-    bot.send_chat_action(chat_id, 'typing')
-    bot.send_message(chat_id, "Winner is: <span class='tg-spoiler'>" + winner.winner + "!</span>")
-    os.remove('output_{chatID}.gif'.format(chatID = chat_id))
-    generating.remove(chat_id)
+
+
+@app.get('/finished')
+def finished(winner: Winner):
+    tele_user = winner.tele_user
+    stop_recording(tele_user)
+
+    bot.send_chat_action(tele_user, 'upload_video')
+    bot.send_animation(tele_user, animation=open('output_{tele_user}.gif'.format(tele_user = tele_user), 'rb'))
+    bot.send_chat_action(tele_user, 'typing')
+    bot.send_message(tele_user, "Winner is: <span class='tg-spoiler'>" + winner.winner + "!</span>")
+    os.remove('output_{tele_user}.gif'.format(tele_user = tele_user))
+    generating.remove(tele_user)
+
+
+
+
 
 @app.post(f'/{TOKEN}/')
 def process_webhook(update: dict):

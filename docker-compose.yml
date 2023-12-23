@@ -13,6 +13,18 @@ services:
       ports:
         - 8001:8001
 
+    generator:
+      environment:
+        TZ: "SG"
+      build: ./generator
+      restart: always
+      env_file:
+        - .env
+      healthcheck:
+          test: ["CMD", "curl", "-f", "http://localhost:8001"]
+          interval: 20s
+          timeout: 10s
+          retries: 5
 
     bot:
       environment:
