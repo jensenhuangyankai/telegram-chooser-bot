@@ -13,18 +13,20 @@ RUN apt-get install -y ghostscript
 
 
 
-RUN pip install icecream fastapi pyTelegramBotAPI gunicorn uvicorn['standard'] tk pillow python-dotenv pyvirtualdisplay
+RUN pip install icecream fastapi pyTelegramBotAPI gunicorn uvicorn['standard'] tk pillow python-dotenv pyvirtualdisplay selenium webdriver-manager
 
 
-ADD graphic_generator.py .
+RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+
+RUN dpkg -i google-chrome-stable_current_amd64.deb
+
+ADD new_graphic_generator.py .
+
+ADD sel.py .
 
 ADD startup.py .
 
 ADD telegram.py .
-
-RUN mkdir eps
-
-RUN mkdir png
 
 CMD ["python3.12", "telegram.py"]
 

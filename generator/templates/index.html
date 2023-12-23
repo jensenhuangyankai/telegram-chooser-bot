@@ -1,0 +1,32 @@
+<html>
+    <head>
+        <!--script src="{{url_for('static', filename='js/index.js')}}"></script-->
+        <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">  
+    </head>
+    <body>
+        <div id="wheelOfFortune">
+            <canvas id="wheel" width="300" height="300"></canvas>
+            <div id="spin"></div>
+        </div>
+
+        <script>
+            const host = {{ host }}
+            const tele_user = {{ tele_user }}
+            const sectors = {{ sectors|tojson }}
+        </script>
+        
+        <script src="{{url_for('static', filename='js/generator.js')}}"></script>
+        <script>
+
+            // INIT!
+            sectors.forEach(drawSector);
+            rotate(); // Initial rotation
+            spin()
+            //var confettiSettings = { target: 'wheel' };
+            //var confetti = new ConfettiGenerator(confettiSettings);
+            
+        </script>
+        
+    </body>
+    
+</html>
