@@ -8,25 +8,32 @@ services:
         - "--all"
         - "--config"
         - "/misc/ngrok.yml"
+        - "-authtoken=${NGROK-AUTHTOKEN}"
       volumes:
         - ./misc:/misc
       ports:
         - 8001:8001
 
     generator:
+      volumes:
+        - ./data:/data
       environment:
         TZ: "SG"
       build: ./generator
       restart: always
       env_file:
         - .env
+      ports:
+        - "5000:5000"
       healthcheck:
-          test: ["CMD", "curl", "-f", "http://localhost:8001"]
+          test: ["CMD", "curl", "-f", "http://localhost:5000/test"]
           interval: 20s
           timeout: 10s
           retries: 5
-
+      
     bot:
+      volumes:
+        - ./data:/data
       environment:
         TZ: "SG"
       build: ./bot

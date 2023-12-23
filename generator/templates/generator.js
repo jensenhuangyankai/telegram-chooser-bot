@@ -8,7 +8,10 @@
     {color:"#bf0", label:"500"},
   ];
 */
-const chunks = []; // here we will store our recorded media chunks (Blobs)
+
+
+console.log("hi");
+console.log(sectors);
 // Generate random float in range min-max:
 const rand = (m, M) => Math.random() * (M - m) + m;
 
@@ -86,10 +89,11 @@ const frame = () => {
       angVel = 0;
       cancelAnimationFrame(animFrame);
 
-      fetch("https://" + host + "/finished" + new URLSearchParams({
+      console.log(elSpin.textContent)
+      fetch("https://" + host + "/finished?" + new URLSearchParams({
         tele_user: String(tele_user),
         winner: String(elSpin.textContent)
-      }))
+      }), { mode: 'no-cors'})
     }
   }
 

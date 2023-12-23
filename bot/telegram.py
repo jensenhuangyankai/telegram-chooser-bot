@@ -3,17 +3,21 @@ import os
 from dotenv import load_dotenv
 import time
 import fastapi
+from fastapi import Request
 from pydantic import BaseModel
 from typing import Union
 import uvicorn
 import logging
 import threading
+from icecream import ic
 
 #from graphic_generator import *
 from new_graphic_generator import *
-from startup import startup
 
-startup()
+
+#from bot.OLD.startup import startup
+
+#startup()
 
 
 load_dotenv()
@@ -28,9 +32,9 @@ telebot.logger.setLevel(logging.INFO)
 
 bot = telebot.TeleBot(TOKEN, parse_mode='HTML') # You can set parse_mode by default. HTML or MARKDOWN
 app = fastapi.FastAPI(docs=None, redoc_url=None)
-
+app.type = "00"
 class Winner(BaseModel):
-    tele_user: Union[str, None]
+    tele_user: Union[str, int, None]
     winner: Union[str, None]
 
 
@@ -89,22 +93,21 @@ def winner(message):
             bot.send_chat_action(message.chat.id, 'typing')
             bot.send_message(message.chat.id, "Almost there...")
             bot.send_chat_action(message.chat.id, 'record_video')
-            
+            ic(pids)
         else:
             bot.reply_to(message, "Please wait for the previous wheel to finish spinning before you generate a new winner!")
             
 
 
 @app.get('/finished')
-def finished(winner: Winner):
-    tele_user = winner.tele_user
+def finished(tele_user: str, winner: str):
+    ic(pids)
     stop_recording(tele_user)
-
     bot.send_chat_action(tele_user, 'upload_video')
-    bot.send_animation(tele_user, animation=open('output_{tele_user}.gif'.format(tele_user = tele_user), 'rb'))
+    bot.send_animation(tele_user, animation=open('/data/output_{tele_user}.gif'.format(tele_user = tele_user), 'rb'))
     bot.send_chat_action(tele_user, 'typing')
-    bot.send_message(tele_user, "Winner is: <span class='tg-spoiler'>" + winner.winner + "!</span>")
-    os.remove('output_{tele_user}.gif'.format(tele_user = tele_user))
+    bot.send_message(tele_user, "Winner is: <span class='tg-spoiler'>" + winner + "!</span>")
+    os.remove('/data/output_{tele_user}.gif'.format(tele_user = tele_user))
     generating.remove(tele_user)
 
 
@@ -129,11 +132,13 @@ time.sleep(0.1)
 bot.set_webhook(url=WEBHOOK_URL_BASE + WEBHOOK_URL_PATH)
                 #certificate=open(WEBHOOK_SSL_CERT, 'r'))
 
-uvicorn.run(
-    app,
-    host='0.0.0.0',
-    port=8001,
-    #ssl_certfile=WEBHOOK_SSL_CERT,
-    #ssl_keyfile=WEBHOOK_SSL_PRIV
-)
+# uvicorn.run(
+#     app,
+#     host='0.0.0.0',
+#     port=8001,
+#     workers=1,
+    
+#     #ssl_certfile=WEBHOOK_SSL_CERT,
+#     #ssl_keyfile=WEBHOOK_SSL_PRIV
+# )
 
