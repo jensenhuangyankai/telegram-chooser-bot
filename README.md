@@ -3,7 +3,7 @@
 
 Indecisive? Never again, with the help of this bot.
 
-
+Try it here: [LINK](https://t.me/ReallyIndecisiveBot)
 
 ## Demo
 
