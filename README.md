@@ -18,7 +18,7 @@ Try it here: [LINK](https://t.me/ReallyIndecisiveBot)
 
 Clone this repo, and just use 
 ```
-    docker compose up --build. 
+    docker compose up --build
 ```
 Remember to set a .env file:
     
