@@ -20,7 +20,6 @@ options.add_experimental_option("excludeSwitches",["enable-automation"])
 options.add_argument('--app=http://127.0.0.1:5000/test')
 options.add_experimental_option("detach", True)
 
-#driver = webdriver.Chrome(service=Service("/usr/bin/google-chrome"), options=options)
 driver = webdriver.Chrome(options=options)
 
 
@@ -29,9 +28,7 @@ choices = sys.argv[2]
 
 link = "http://generator:5000/generate?tele_user={tele_user}&options={options}".format(tele_user=str(tele_user), options = str(choices))
 ic(link)
-driver.save_screenshot('/data/ss.png')
 driver.get(str(link))
-driver.save_screenshot('/data/ss1.png')
 while True:
     pass
 

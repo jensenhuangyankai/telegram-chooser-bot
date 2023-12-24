@@ -1,12 +1,13 @@
 <html>
     <head>
-        <!--script src="{{url_for('static', filename='js/index.js')}}"></script-->
+        <script src="{{url_for('static', filename='js/confetti.js')}}"></script>
         <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">  
     </head>
     <body>
         <div id="wheelOfFortune">
             <canvas id="wheel" width="300" height="300"></canvas>
             <div id="spin"></div>
+            <div id="text" class="centered"></div>
         </div>
 
         <script>

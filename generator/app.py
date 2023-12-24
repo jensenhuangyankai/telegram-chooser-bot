@@ -5,6 +5,8 @@ from dotenv import load_dotenv
 import random
 from icecream import ic
 from ast import literal_eval
+import random
+import colorsys
 load_dotenv()
 
 WEBHOOK_HOST = os.getenv('WEBHOOK_HOST')
@@ -28,11 +30,15 @@ def generate():
     options = literal_eval(request.args.get('options'))
     new_options = []
     for option in options:
-            colors = ['#fc0c8e', '#fd8a1a', '#fde334', '#acfb13', '#21d1fd', '#ee0f58', 
-                      '#fb7a08', '#fdf12f', '#36e8f3', '#8b1df2',
-                      '#e71919', '#fb8637', '#fdef0a', '#57e9f6', '#1683e8']
+            h,s,l = random.random(), 0.6 + random.random()/3.0, 0.72
+            r,g,b = [int(256*i) for i in colorsys.hls_to_rgb(h,l,s)]
+            color = '#%02x%02x%02x' % (r,g,b)
+
+            # colors = ['#fc0c8e', '#fd8a1a', '#fde334', '#acfb13', '#21d1fd', '#ee0f58', 
+            #           '#fb7a08', '#fdf12f', '#36e8f3', '#8b1df2',
+            #           '#e71919', '#fb8637', '#fdef0a', '#57e9f6', '#1683e8']
             #color = "#" + "%06x" % random.randint(0, 0xFFFFFF)
-            color = random.choice(colors)
+            #color = random.choice(colors)
             new_options.append({ "color" : str(color), "label" : str(option)})
 
     return render_template('index.html', sectors = new_options, tele_user = tele_user, host = Markup("'" + str(WEBHOOK_HOST) + "'"))

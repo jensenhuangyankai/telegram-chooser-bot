@@ -27,6 +27,8 @@ ADD sel.py .
 
 ADD telegram.py .
 
+ADD startup.py .
+
 RUN touch /tmp/xvfb.auth
 
 CMD ["uvicorn", "telegram:app", "--host", "0.0.0.0", "--port", "8001", "--workers", "1"]
